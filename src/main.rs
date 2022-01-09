@@ -1,5 +1,3 @@
-//!
-
 use std::{env, path::Path, process::exit};
 
 const USAGE: &str = r#"usage: uniqopy <file>"#;
@@ -21,6 +19,7 @@ fn test_md5_of() {
     assert_eq!(md5_of(b"fibblesnork"), "ebcceb2950ed7e58c00b60a701efeb98");
 }
 
+/// Generate a date-and-time-stamp using the system's local time.
 fn timestamp() -> String {
     use chrono::{DateTime, Local};
     let now: DateTime<Local> = Local::now();
@@ -31,8 +30,8 @@ fn timestamp() -> String {
 ///
 /// For example:
 ///
-/// * `foo.jpg` becomes `foo-<timestamp>-<md5>.jpg`
-/// * `bar` becomes `bar-<timestamp>-<md5>`
+/// * `foo.jpg` becomes `foo.<timestamp>.<md5>.jpg`
+/// * `bar` becomes `bar.<timestamp>.<md5>`
 fn new_name(fname: &Path, ts: &str, md5: &str) -> Result<String, &'static str> {
     let fpath = std::path::Path::new(&fname);
     if !fpath.is_file() {
@@ -45,8 +44,8 @@ fn new_name(fname: &Path, ts: &str, md5: &str) -> Result<String, &'static str> {
     };
 
     let new_name = match fpath.extension() {
-        Some(ext) => format!("{}-{}-{}.{}", fname, ts, md5, ext.to_string_lossy()),
-        None => format!("{}-{}-{}", fname, ts, md5),
+        Some(ext) => format!("{}.{}.{}.{}", fname, ts, md5, ext.to_string_lossy()),
+        None => format!("{}.{}.{}", fname, ts, md5),
     };
     Ok(new_name)
 }
