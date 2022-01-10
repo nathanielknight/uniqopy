@@ -3,7 +3,6 @@ name = "uniqopy"
 version = "0.2.0"
 edition = "2021"
 authors = ["Nathaniel Knight <nathaniel.ep@gmail.com>"]
-license = "Parity-7.0.0"
 license-file = "LICENSE.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
