@@ -1,11 +1,13 @@
 [package]
 name = "uniqopy"
+description = "Create a copy of a file with a unique name (based on timestamp and MD5-hash)."
 version = "0.2.0"
 edition = "2021"
 authors = ["Nathaniel Knight <nathaniel.ep@gmail.com>"]
 license-file = "LICENSE.md"
+homepage = "https://github.com/nathanielknight/uniqopy"
+repository = "https://github.com/nathanielknight/uniqopy"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 chrono = "0.4.19"
