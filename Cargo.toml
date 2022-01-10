@@ -7,7 +7,7 @@ authors = ["Nathaniel Knight <nathaniel.ep@gmail.com>"]
 license-file = "LICENSE.md"
 homepage = "https://github.com/nathanielknight/uniqopy"
 repository = "https://github.com/nathanielknight/uniqopy"
-
+categories = ["command-line-utilities"]
 
 [dependencies]
 chrono = "0.4.19"
