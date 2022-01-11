@@ -1,5 +1,7 @@
 # Uniqopy
 
+[![CI](https://github.com/nathanielknight/uniqopy/actions/workflows/ci.yml/badge.svg)](https://github.com/nathanielknight/uniqopy/actions/workflows/ci.yml)
+
 Create a unique copy of a file using its name, the system time, and
 [MD5 hashing](https://en.wikipedia.org/wiki/MD5).
 
