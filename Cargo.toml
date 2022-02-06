@@ -1,7 +1,7 @@
 [package]
 name = "uniqopy"
 description = "Create a copy of a file with a unique name (based on timestamp and MD5-hash)."
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["Nathaniel Knight <nathaniel.ep@gmail.com>"]
 license-file = "LICENSE.md"

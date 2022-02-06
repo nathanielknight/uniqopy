@@ -1,5 +1,7 @@
 use std::{env, path::Path, process::exit};
 
+const VERSION: &str = std::env!("CARGO_PKG_VERSION");
+
 const USAGE: &str = r#"
 usage: uniqopy <file>
 
@@ -65,7 +67,7 @@ fn main() {
     let fpath = match &args[..] {
         [_, fname] => Path::new(fname),
         _ => {
-            eprint!("{}", USAGE);
+            eprint!("uniqopy version {}\n{}", VERSION, USAGE);
             exit(1);
         }
     };
