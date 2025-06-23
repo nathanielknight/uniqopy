@@ -1,4 +1,10 @@
-use std::{env, path::Path, process::exit};
+use std::{
+    env,
+    fs::File,
+    io::{BufReader, Read},
+    path::Path,
+    process::exit,
+};
 
 const VERSION: &str = std::env!("CARGO_PKG_VERSION");
 
@@ -14,21 +20,28 @@ Examples:
     example.txt -> example.2022-02-02-22:22:22.d41d8cd98f00b204e9800998ecf8427e.txt
 "#;
 
-/// Calculate the MD5 of a stream of input data. Used to get a (reasonably)
+/// Calculate the MD5 of a file using buffered reading. Used to get a (reasonably)
 /// unique signature for each input file.
 ///
 /// Note that MD5 is [not cryptographically
 /// secure](https://en.wikipedia.org/wiki/MD5#Security), so you shouldn't rely
 /// on the uniqueness of this hash when accepting un-trusted input.
-fn md5_of(val: &[u8]) -> String {
-    let digest = md5::compute(val);
-    format!("{:x}", digest)
-}
+fn md5_of_file(file_path: &Path) -> Result<String, std::io::Error> {
+    let file = File::open(file_path)?;
+    let mut reader = BufReader::new(file);
+    let mut context = md5::Context::new();
+    let mut buffer = vec![0; 10 * 1024 * 1024]; // 10MB buffer
 
-#[test]
-fn test_md5_of() {
-    assert_eq!(md5_of(b"foobar"), "3858f62230ac3c915f300c664312c63f");
-    assert_eq!(md5_of(b"fibblesnork"), "ebcceb2950ed7e58c00b60a701efeb98");
+    loop {
+        let bytes_read = reader.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        context.consume(&buffer[..bytes_read]);
+    }
+
+    let digest = context.compute();
+    Ok(format!("{:x}", digest))
 }
 
 /// Generate a date-and-time-stamp using the system's local time.
@@ -73,14 +86,13 @@ fn main() {
     };
 
     // Get md5 of file contents
-    let file_content = match std::fs::read(&fpath) {
-        Ok(val) => val,
+    let md5 = match md5_of_file(fpath) {
+        Ok(hash) => hash,
         Err(e) => {
-            eprintln!("Error opening {}: {}", &fpath.to_string_lossy(), e);
+            eprintln!("Error reading {}: {}", &fpath.to_string_lossy(), e);
             exit(2);
         }
     };
-    let md5 = md5_of(&file_content);
 
     // Get timestamp
     let ts = timestamp();
@@ -94,7 +106,7 @@ fn main() {
         }
     };
     println!("Copying {} to {}", fpath.to_string_lossy(), destination);
-    match std::fs::copy(&fpath, &destination) {
+    match std::fs::copy(fpath, &destination) {
         Ok(bytes) => {
             println!("Copyied {} bytes", bytes);
         }
